@@ -1,6 +1,5 @@
-package IHM;
+package Jeu;
 
-import Jeu.*;
 
 public class Commandes {
 

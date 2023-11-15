@@ -3,9 +3,16 @@ package Jeu;
 import java.util.Arrays;
 
 public class JeuGo {
-    private static final char[] alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
+    private static final char[] alphabet = "ABCDEFGHJKLMNOPQRSTUVWXYZ".toCharArray();
+    //I est exclu, 2.11 des specifications
     private static boolean plateauCree = false;
     private String[][] plateau;
+
+    //board configuration
+    //number of captured stones of either color
+    //move history
+    //komi : points de compensation pour le joueur blanc (je crois)
+    //time settings
 
     public void setSize(int size) {
         plateauCree = true;

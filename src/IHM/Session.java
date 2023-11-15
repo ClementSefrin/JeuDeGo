@@ -1,6 +1,6 @@
 package IHM;
 
-import Jeu.JeuGo;
+import Jeu.*;
 
 import java.util.Scanner;
 
@@ -26,7 +26,7 @@ public class Session {
                 case "quit":
                     break;
                 default:
-                    System.out.printf("? Veuillez rentrer une commande valide. Commandes disponibles : %s, %s, %s%n", "boardsize", "showboard", "quit");
+                    System.out.printf("? unknown command");
                     break;
             }
         }
@@ -39,7 +39,7 @@ public class Session {
         }
         boolean tailleCorrecte = Commandes.boardsize(go, Integer.parseInt(params[1]));
         if (!tailleCorrecte) {
-            System.out.println("? Erreur : la taille du plateau doit être comprise entre 9 et 19");
+            System.out.println("? unacceptable size");
             return;
         }
         System.out.println("=\n");
