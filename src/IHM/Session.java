@@ -34,7 +34,7 @@ public class Session {
 
     private static void boardsize(JeuGo go, String[] params) {
         if (params.length != 2) {
-            System.out.println("? Erreur : la commande boardsize doit être suivie d'un paramètre");
+            System.out.println("? missing parameter");
             return;
         }
         boolean tailleCorrecte = Commandes.boardsize(go, Integer.parseInt(params[1]));
@@ -47,12 +47,12 @@ public class Session {
 
     private static void showboard(JeuGo go, String[] params) {
         if (params.length != 1) {
-            System.out.println("? Erreur : la commande showboard ne doit pas être suivie de paramètres");
+            System.out.println("? no parameter needed");
             return;
         }
         String plateau = Commandes.showboard(go);
         if (plateau.equals("erreur")) {
-            System.out.println("? Erreur : le plateau n'a pas de taille définie");
+            System.out.println("? board has no size");
             return;
         }
         StringBuilder sb = new StringBuilder();
