@@ -2,6 +2,10 @@
 
 ### Application en ligne de commande permettant de jouer une partie de Go.
 
+### Groupe : 206
+- Nicolas Estermann
+- Clément Galibardy-Séfrin
+- Clément Salliot
 Dernier sprint validé : Sprint 1
 
 ## Sprint 1 :
