@@ -6,10 +6,11 @@
 - Nicolas Estermann
 - Clément Galibardy-Séfrin
 - Clément Salliot
-Dernier sprint validé : Sprint 1
 
 ## Sprint 1 :
 
 - boardsize : prend en paramètre un nombre. Permet de définir la taille du plateau de jeu
 - showboard : ne prend aucun paramètre. Permet d’afficher le tableau
 - quit : ne prend aucun paramètre. Permet d’arrêter l’application
+
+  # Dernier sprint validé : Sprint 1
