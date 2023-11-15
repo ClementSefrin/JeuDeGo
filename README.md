@@ -13,4 +13,4 @@
 - showboard : ne prend aucun paramètre. Permet d’afficher le tableau
 - quit : ne prend aucun paramètre. Permet d’arrêter l’application
 
-  # Dernier sprint validé : Sprint 1
+## Dernier sprint validé : Sprint 1
