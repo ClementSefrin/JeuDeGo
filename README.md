@@ -6,6 +6,7 @@
 - Nicolas Estermann
 - Clément Galibardy-Séfrin
 - Clément Salliot
+- Kévin Jiang
 
 ## Sprint 1 :
 
