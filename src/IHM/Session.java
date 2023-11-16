@@ -10,43 +10,56 @@ public class Session {
     public static void session() {
         JeuGo go = new JeuGo();
 
-        String commande = "go";
-        while (!commande.equals("quit")) {
-            commande = sc.nextLine().trim();
-            String[] params = commande.split(" ");
-            commande = params[0];
-
-            switch (commande) {
+        String command = "go";
+        while (!command.equals("quit")) {
+            command = sc.nextLine().trim();
+            String[] params = command.split(" ");
+            command = params[0];
+            int id = -1;
+            if (isNumeric(command)) {
+                id = Integer.parseInt(command);
+                command = params[1];
+            }
+            switch (command) {
                 case "boardsize":
-                    boardsize(go, params);
+                    boardsize(id, go, params);
                     break;
                 case "showboard":
-                    showboard(go, params);
+                    showboard(id, go, params);
                     break;
                 case "quit":
+                    quit(id);
                     break;
                 default:
-                    System.out.printf("? unknown command");
+                    System.out.println("? unknown command");
                     break;
             }
         }
     }
 
-    private static void boardsize(JeuGo go, String[] params) {
-        if (params.length != 2) {
+    private static void boardsize(int id, JeuGo go, String[] params) {
+        if ((params.length != 2 && id == -1) || (params.length != 3 && id != -1)) {
             System.out.println("? missing parameter");
             return;
         }
-        boolean tailleCorrecte = Commandes.boardsize(go, Integer.parseInt(params[1]));
+        int size;
+        if (id == -1)
+            size = Integer.parseInt(params[1]);
+        else
+            size = Integer.parseInt(params[2]);
+
+        boolean tailleCorrecte = Commandes.boardsize(go, size);
         if (!tailleCorrecte) {
             System.out.println("? unacceptable size");
             return;
         }
-        System.out.println("=\n");
+        if (id != -1)
+            System.out.print(id);
+        System.out.println(" =");
     }
 
-    private static void showboard(JeuGo go, String[] params) {
-        if (params.length != 1) {
+    private static void showboard(int id, JeuGo go, String[] params) {
+        if ((params.length != 1 && id == -1) || (params.length != 2 && id != -1)) {
             System.out.println("? no parameter needed");
             return;
         }
@@ -56,7 +69,27 @@ public class Session {
             return;
         }
         StringBuilder sb = new StringBuilder();
-        sb.append("=\n").append(plateau).append("\n\n");
+        if (id != -1)
+            sb.append(id);
+        sb.append(" =\n").append(plateau).append("\n");
         System.out.println(sb.toString());
+    }
+
+    private static void quit(int id) {
+        if (id != -1)
+            System.out.print(id);
+        System.out.println(" =");
+    }
+
+    public static boolean isNumeric(String strNum) {
+        if (strNum == null) {
+            return false;
+        }
+        try {
+            double d = Double.parseDouble(strNum);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        return true;
     }
 }
