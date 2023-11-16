@@ -28,18 +28,28 @@ public class Session {
                     showboard(id, go, params);
                     break;
                 case "quit":
-                    quit(id);
+                    command = quit(id, params);
                     break;
                 default:
-                    System.out.println("? unknown command");
+                    displayErrorMessage(id, "unknown command");
                     break;
             }
         }
     }
 
+    private static void displayErrorMessage(int id, String errorMessage) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("?");
+        if (id != -1)
+            sb.append(id);
+        sb.append(" ").append(errorMessage);
+        System.out.println(sb.toString());
+        return;
+    }
+
     private static void boardsize(int id, JeuGo go, String[] params) {
         if ((params.length != 2 && id == -1) || (params.length != 3 && id != -1)) {
-            System.out.println("? missing parameter");
+            displayErrorMessage(id, "one parameter is needed");
             return;
         }
         int size;
@@ -50,35 +60,46 @@ public class Session {
 
         boolean tailleCorrecte = Commandes.boardsize(go, size);
         if (!tailleCorrecte) {
-            System.out.println("? unacceptable size");
+            displayErrorMessage(id, "unacceptable size");
             return;
         }
+        System.out.print("=");
         if (id != -1)
-            System.out.print(id);
-        System.out.println(" =");
+            System.out.println(id);
+        else System.out.println("");
+
     }
 
     private static void showboard(int id, JeuGo go, String[] params) {
         if ((params.length != 1 && id == -1) || (params.length != 2 && id != -1)) {
-            System.out.println("? no parameter needed");
+            displayErrorMessage(id, "one parameter is needed");
             return;
         }
         String plateau = Commandes.showboard(go);
         if (plateau.equals("erreur")) {
-            System.out.println("? board has no size");
+            displayErrorMessage(id, "board has no size");
             return;
         }
         StringBuilder sb = new StringBuilder();
+
+        sb.append("=");
         if (id != -1)
-            sb.append(id);
-        sb.append(" =\n").append(plateau).append("\n");
+            sb.append(id).append("\n");
+        else
+            sb.append("\n");
+        sb.append(plateau).append("\n");
         System.out.println(sb.toString());
     }
 
-    private static void quit(int id) {
+    private static String quit(int id, String[] params) {
+        if ((params.length != 1 && id == -1) || (params.length != 2 && id != -1)) {
+            displayErrorMessage(id, "no parameters needed");
+            return "notQuit";
+        }
+        System.out.print("=");
         if (id != -1)
-            System.out.print(id);
-        System.out.println(" =");
+            System.out.println(id);
+        return "quit";
     }
 
     public static boolean isNumeric(String strNum) {
