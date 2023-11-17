@@ -10,7 +10,7 @@ public class Session {
     public static void session() {
         JeuGo go = new JeuGo();
 
-        String command = "go";
+        String command = "start";
         while (!command.equals("quit")) {
             command = sc.nextLine().trim();
             String[] params = command.split(" ");
@@ -28,7 +28,7 @@ public class Session {
                     showboard(id, go, params);
                     break;
                 case "quit":
-                    command = quit(id, params);
+                    quit(id, params);
                     break;
                 default:
                     displayErrorMessage(id, "unknown command");
@@ -44,14 +44,31 @@ public class Session {
             sb.append(id);
         sb.append(" ").append(errorMessage);
         System.out.println(sb.toString());
-        return;
+    }
+
+    private static void displaySuccessMessage(int id, String[] successMessages) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("=");
+        if (id != -1)
+            sb.append(id);
+        sb.append("\n");
+        for (String successMessage : successMessages) {
+            sb.append(successMessage).append("\n");
+        }
+        System.out.print(sb.toString());
     }
 
     private static void boardsize(int id, JeuGo go, String[] params) {
-        if ((params.length != 2 && id == -1) || (params.length != 3 && id != -1)) {
-            displayErrorMessage(id, "one parameter is needed");
+        /*
+        Syntax error. If the engine cannot handle the new size,
+        fails with the error message ”unacceptable size”
+         */
+
+        if ((params.length == 1 && id == -1) || (params.length == 2 && id != -1)) {
+            displayErrorMessage(id, "unacceptable size");
             return;
         }
+
         int size;
         if (id == -1)
             size = Integer.parseInt(params[1]);
@@ -63,43 +80,22 @@ public class Session {
             displayErrorMessage(id, "unacceptable size");
             return;
         }
-        System.out.print("=");
-        if (id != -1)
-            System.out.println(id);
-        else System.out.println("");
-
+        displaySuccessMessage(id, new String[]{});
     }
 
     private static void showboard(int id, JeuGo go, String[] params) {
-        if ((params.length != 1 && id == -1) || (params.length != 2 && id != -1)) {
-            displayErrorMessage(id, "one parameter is needed");
-            return;
-        }
+        /*
+        never fails
+         */
         String plateau = Commandes.showboard(go);
-        if (plateau.equals("erreur")) {
-            displayErrorMessage(id, "board has no size");
-            return;
-        }
-        StringBuilder sb = new StringBuilder();
-
-        sb.append("=");
-        if (id != -1)
-            sb.append(id).append("\n");
-        else
-            sb.append("\n");
-        sb.append(plateau).append("\n");
-        System.out.println(sb.toString());
+        displaySuccessMessage(id, new String[]{plateau});
     }
 
-    private static String quit(int id, String[] params) {
-        if ((params.length != 1 && id == -1) || (params.length != 2 && id != -1)) {
-            displayErrorMessage(id, "no parameters needed");
-            return "notQuit";
-        }
-        System.out.print("=");
-        if (id != -1)
-            System.out.println(id);
-        return "quit";
+    private static void quit(int id, String[] params) {
+        /*
+        never fails
+         */
+        displaySuccessMessage(id, new String[]{});
     }
 
     public static boolean isNumeric(String strNum) {
