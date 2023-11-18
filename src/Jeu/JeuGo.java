@@ -3,10 +3,11 @@ package Jeu;
 import java.util.Arrays;
 
 public class JeuGo {
-    private static final char[] alphabet = "ABCDEFGHJKLMNOPQRSTUVWXYZ".toCharArray();
+    private static final String alphabet = "ABCDEFGHJKLMNOPQRSTUVWXYZ";
     //I est exclu, 2.11 des specifications
-    private static boolean plateauCree = false;
-    private String[][] plateau;
+    private static boolean isBoardCreated = false;
+    private static final String black = "X", white = "O";
+    private String[][] board;
 
     //board configuration
     //number of captured stones of either color
@@ -14,44 +15,56 @@ public class JeuGo {
     //komi : points de compensation pour le joueur blanc (je crois)
     //time settings
 
+
+    public String[][] getBoard() {
+        return board;
+    }
+
+    public static String getAlphabet() {
+        return alphabet;
+    }
+
     public void setSize(int size) {
-        plateauCree = true;
-        plateau = new String[size][size];
-        for (String[] ligne : plateau) {
-            Arrays.fill(ligne, ".");
+        isBoardCreated = true;
+        board = new String[size][size];
+        for (String[] line : board) {
+            Arrays.fill(line, ".");
         }
     }
 
+    public void playMove(String color, int x, int y) {
+        board[x][y] = (color.equals("black") ? black : white);
+    }
+
+    public boolean isBoardCreated() {
+        return isBoardCreated;
+    }
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
         sb.append("    ");
-        for (int i = 0; i < plateau.length; i++) {
-            sb.append(alphabet[i]).append("  ");
+        for (int i = 0; i < board.length; i++) {
+            sb.append(alphabet.charAt(i)).append("  ");
         }
         sb.append("\n");
 
-        for (int i = 0; i < plateau.length; i++) {
-            sb.append(i + 1).append("  ");
+        for (int i = 0; i < board.length; i++) {
+            sb.append(board.length - i).append("  ");
             if (i < 9)
                 sb.append(" ");
-            for (int j = 0; j < plateau[i].length; j++) {
-                sb.append(plateau[i][j]).append("  ");
+            for (int j = 0; j < board[i].length; j++) {
+                sb.append(board[i][j]).append("  ");
             }
-            sb.append(i + 1).append("\n");
+            sb.append(board.length - i).append("\n");
         }
 
         sb.append("    ");
-        for (int i = 0; i < plateau.length; i++) {
-            sb.append(alphabet[i]).append("  ");
+        for (int i = 0; i < board.length; i++) {
+            sb.append(alphabet.charAt(i)).append("  ");
         }
         sb.append("\n");
 
         return sb.toString();
-    }
-
-    public boolean plateauCree() {
-        return plateauCree;
     }
 }
