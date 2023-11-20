@@ -48,11 +48,15 @@ public class Session {
     }
 
     private static void play(int id, JeuGo go, String[] params) {
+        if (params.length != 3) {
+            displayErrorMessage(id, "syntax error");
+            return;
+        }
         String message = Commandes.play(go, params[1], params[2]);
-        if (message =="ok")
+        if (message == "ok")
             displaySuccessMessage(id, new String[]{});
         else
-            displayErrorMessage(id, "illegal move");
+            displayErrorMessage(id, message);
     }
 
     private static void clearBoard(int id, JeuGo go) {

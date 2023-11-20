@@ -19,19 +19,22 @@ public class Commandes {
     }
 
     public static String play(JeuGo go, String color, String coord) {
-        if (color.equals("white") || color.equals("black")) {
-            if (coord.length() == 2) {
-                int y = go.getAlphabet().indexOf(coord.charAt(0));
-                int x = go.getBoard().length- Integer.parseInt(coord.substring(1));
-                String[][] board = go.getBoard();
-                if (!board[x][y].equals(".")) {
-                    return "error";
-                }
-                if (x >= 0 && x < board.length && y >= 0 && y < board.length) {
-                    go.playMove(color, x, y);
-                }
-            }
+        if (!go.isBoardCreated())
+            return "illegal move";
+        if (!color.equals("white") && !color.equals("black"))
+        return "syntaxe error";
+
+        String[][] board = go.getBoard();
+        int y = go.getAlphabet().indexOf(coord.charAt(0));
+        int x = go.getBoard().length - Integer.parseInt(coord.substring(1));
+        if (y == -1)
+            return "illegal move";
+
+        if (!board[x][y].equals(".")) {
+            return "illegal move";
         }
+
+        go.playMove(color, x, y);
         return "ok";
     }
 }
