@@ -14,7 +14,7 @@
 - showboard : ne prend aucun paramètre. Permet d’afficher le tableau
 - quit : ne prend aucun paramètre. Permet d’arrêter l’application
 
-##Sprint 2 :
+## Sprint 2 :
 
 - play : poser une pierre dans le damier, pas sur une pierre -> prendre des pierres ennemies -> interdire le suicide -> sauf si prise -> Ko (facultatif)
 - genmvove : gérer moteur de jeu et autre joueur
