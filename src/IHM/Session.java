@@ -8,7 +8,7 @@ import java.util.Scanner;
 public class Session {
     private static final Scanner sc = new Scanner(System.in);
 
-    private static final int NO_ID = -1, CLEARED_BOARD_SIZE = 9;
+    private static final int NO_ID = -1;
 
     public static void session() {
         JeuGo go = new JeuGo();
@@ -59,7 +59,7 @@ public class Session {
         /*
         never fails
          */
-        Commandes.boardsize(go, CLEARED_BOARD_SIZE);
+        Commandes.boardsize(go, go.getBoard().length);
         //reset number of captured stones of either color
         //reset move history to empty
 

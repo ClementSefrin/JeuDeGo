@@ -51,7 +51,7 @@ public class JeuGo {
 
         for (int i = 0; i < board.length; i++) {
             sb.append(board.length - i).append("  ");
-            if (i < 9)
+            if (board.length - i < 10)
                 sb.append(" ");
             for (int j = 0; j < board[i].length; j++) {
                 sb.append(board[i][j]).append("  ");
