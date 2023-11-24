@@ -7,16 +7,15 @@ import java.util.Scanner;
 
 public class Session {
     private static final Scanner sc = new Scanner(System.in);
-
+    private static JeuGo go = new JeuGo();
     private static final int NO_ID = -1;
 
     public static void session() {
-        JeuGo go = new JeuGo();
-
         String command = "start";
         while (!command.equals("quit")) {
             command = sc.nextLine().trim();
             String[] params = command.split(" ");
+
             command = params[0];
             int id = NO_ID;
             if (isNumeric(command)) {
@@ -26,16 +25,16 @@ public class Session {
             }
             switch (command) {
                 case "boardsize":
-                    boardsize(id, go, params);
+                    boardsize(id, params);
                     break;
                 case "play":
-                    play(id, go, params);
+                    play(id, params);
                     break;
                 case "showboard":
-                    showboard(id, go);
+                    showboard(id);
                     break;
                 case "clear_board":
-                    clearBoard(id, go);
+                    clearBoard(id);
                     break;
                 case "quit":
                     quit(id);
@@ -47,30 +46,8 @@ public class Session {
         }
     }
 
-    private static void play(int id, JeuGo go, String[] params) {
-        if (params.length != 3) {
-            displayErrorMessage(id, "syntax error");
-            return;
-        }
-        String message = Commandes.play(go, params[1], params[2]);
-        if (message == "ok")
-            displaySuccessMessage(id, new String[]{});
-        else
-            displayErrorMessage(id, message);
-    }
-
-    private static void clearBoard(int id, JeuGo go) {
-        /*
-        never fails
-         */
-        Commandes.boardsize(go, go.getBoard().length);
-        //reset number of captured stones of either color
-        //reset move history to empty
-
-        displaySuccessMessage(id, new String[]{});
-    }
-
-    private static void boardsize(int id, JeuGo go, String[] params) {
+    //--------------------------board commands--------------------------//
+    private static void boardsize(int id, String[] params) {
         /*
         Syntax error. If the engine cannot handle the new size,
         fails with the error message ”unacceptable size”
@@ -87,10 +64,17 @@ public class Session {
             displayErrorMessage(id, "unacceptable size");
             return;
         }
+
+        //reset number of captured stones of either color
+        go.resetCapturedStones();
+
+        //reset move history to empty
+
+
         displaySuccessMessage(id, new String[]{});
     }
 
-    private static void showboard(int id, JeuGo go) {
+    private static void showboard(int id) {
         /*
         never fails
          */
@@ -98,6 +82,29 @@ public class Session {
         displaySuccessMessage(id, new String[]{board});
     }
 
+    private static void clearBoard(int id) {
+        /*
+        never fails
+         */
+        Commandes.boardsize(go, go.getBoard().length);
+        displaySuccessMessage(id, new String[]{});
+    }
+
+    //--------------------------game commands--------------------------//
+    private static void play(int id, String[] params) {
+        if (params.length != 3) {
+            displayErrorMessage(id, "syntax error");
+            return;
+        }
+        String message = Commandes.play(go, params[1], params[2]);
+        if (message == "ok")
+            displaySuccessMessage(id, new String[]{});
+        else
+            displayErrorMessage(id, message);
+    }
+
+
+    //--------------------------session commands--------------------------//
     private static void quit(int id) {
         /*
         never fails
@@ -105,6 +112,7 @@ public class Session {
         displaySuccessMessage(id, new String[]{});
     }
 
+    //--------------------------display commands--------------------------//
     private static void displayErrorMessage(int id, String errorMessage) {
         StringBuilder sb = new StringBuilder();
         sb.append("?");
@@ -126,6 +134,7 @@ public class Session {
         System.out.print(sb.toString());
     }
 
+    //--------------------------utils--------------------------//
     public static boolean isNumeric(String strNum) {
         if (strNum == null) {
             return false;
