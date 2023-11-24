@@ -23,6 +23,7 @@ public class Session {
                 command = params[1];
                 params = Arrays.copyOfRange(params, 1, params.length);
             }
+
             switch (command) {
                 case "boardsize":
                     boardsize(id, params);

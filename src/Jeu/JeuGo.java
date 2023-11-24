@@ -4,28 +4,62 @@ import java.util.Arrays;
 
 public class JeuGo {
     private static final String alphabet = "ABCDEFGHJKLMNOPQRSTUVWXYZ";
-    //I est exclu, 2.11 des specifications
-    private static boolean isBoardCreated = false;
     private static final String black = "X", white = "O";
-    private String[][] board;
     private int blackCaptured = 0, whiteCaptured = 0;
+    private String[][] board;
+    private static boolean isBoardCreated = false;
 
-    //number of captured stones of either color
     //move history
     //komi : points de compensation pour le joueur blanc (je crois)
     //time settings
 
-    public void resetCapturedStones() {
-        blackCaptured = 0;
-        whiteCaptured = 0;
+
+    //--------------------------board commands--------------------------//
+    public void setSize(int size) {
+        isBoardCreated = true;
+        board = new String[size][size];
+        for (String[] line : board) {
+            Arrays.fill(line, ".");
+        }
     }
 
     public String[][] getBoard() {
         return board;
     }
 
-    public static String getAlphabet() {
-        return alphabet;
+    public boolean isBoardCreated() {
+        return isBoardCreated;
+    }
+
+    //--------------------------play commands--------------------------//
+    public void playMove(String color, int x, int y) {
+        board[x][y] = (color.equals("black") ? black : white);
+    }
+
+    public void capture(int x, int y) {
+        String color = board[x][y];
+        board[x][y] = ".";
+        if (color.equals(black))
+            blackCaptured++;
+        else
+            whiteCaptured++;
+    }
+
+    public boolean isCaptured(int x, int y) {
+        if (x < 0 || x >= board.length || y < 0 || y >= board.length)
+            return false;
+
+        if (board[x][y].equals("."))
+            return false;
+
+        String otherColor = board[x][y] == black ? white : black;
+
+        int[][] neighbours = getNeighbours(x, y);
+        for (int[] neighbour : neighbours) {
+            if (neighbour != null && !board[neighbour[0]][neighbour[1]].equals(otherColor))
+                return false;
+        }
+        return true;
     }
 
     public int[][] getNeighbours(int x, int y) {
@@ -41,83 +75,48 @@ public class JeuGo {
         return neighbours;
     }
 
-    public boolean isCaptured(int x, int y) {
-        if (x < 0 || x >= board.length || y < 0 || y >= board.length)
-            return false;
-        if (board[x][y].equals("."))
-            return false;
-        String otherColor = board[x][y] == black ? white : black;
-        //récupérer les cases voisine valides
-        int[][] neighbours = getNeighbours(x, y);
-        //vérifier la couleur des cases voisines valides
-        for (int[] neighbour : neighbours) {
-            if (neighbour != null && !board[neighbour[0]][neighbour[1]].equals(otherColor))
-                return false;
+    //--------------------------utils--------------------------//
+    public void resetCapturedStones() {
+        blackCaptured = 0;
+        whiteCaptured = 0;
+    }
+
+    public static String getAlphabet() {
+        return alphabet;
+    }
+
+    private String displayLetters() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(" \t");
+        for (int i = 0; i < board.length; i++) {
+            sb.append(alphabet.charAt(i)).append(" \t");
         }
-        return true;
-    }
+        sb.append("\n");
 
-    public void capture(int x, int y) {
-        String color = board[x][y];
-        board[x][y] = ".";
-        if (color.equals(black))
-            blackCaptured++;
-        else
-            whiteCaptured++;
-    }
-
-    public void setSize(int size) {
-        isBoardCreated = true;
-        board = new String[size][size];
-        for (String[] line : board) {
-            Arrays.fill(line, ".");
-        }
-    }
-
-    public void playMove(String color, int x, int y) {
-        board[x][y] = (color.equals("black") ? black : white);
-    }
-
-    public boolean isBoardCreated() {
-        return isBoardCreated;
+        return sb.toString();
     }
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        //--------------------afficher les lettres----------------------//
-        sb.append("    ");
-        for (int i = 0; i < board.length; i++) {
-            sb.append(alphabet.charAt(i)).append("  ");
-        }
-        sb.append("\n");
 
-        //--------------------afficher les lignes----------------------//
+        sb.append(displayLetters());
+
         for (int i = 0; i < board.length; i++) {
-            sb.append(board.length - i).append("  ");
-            //espace pour aligner chiffre/nombres
-            if (board.length - i < 10)
-                sb.append(" ");
-            //afficher les cases
+            sb.append(board.length - i).append(" \t");
             for (int j = 0; j < board[i].length; j++) {
-                sb.append(board[i][j]).append("  ");
+                sb.append(board[i][j]).append(" \t");
             }
-            //afficher les chiffres
             sb.append(board.length - i);
-            //afficher les pierres capturées
             if (i == board.length - 2)
-                sb.append("\t").append("WHITE (").append(JeuGo.white).append(") has captures ").append(blackCaptured).append(" stones").append("\n");
+                sb.append(" \t").append("WHITE (").append(JeuGo.white).append(") has captures ").append(blackCaptured).append(" stones").append("\n");
             else if (i == board.length - 1)
-                sb.append("\t").append("BLACK (").append(JeuGo.black).append(") has captures ").append(whiteCaptured).append(" stones").append("\n");
-            else sb.append("\n");
-
+                sb.append(" \t").append("BLACK (").append(JeuGo.black).append(") has captures ").append(whiteCaptured).append(" stones").append("\n");
+            else
+                sb.append("\n");
         }
 
-        //--------------------afficher les lettres----------------------//
-        sb.append("    ");
-        for (int i = 0; i < board.length; i++) {
-            sb.append(alphabet.charAt(i)).append("  ");
-        }
-        sb.append("\n");
+        sb.append(displayLetters());
 
         return sb.toString();
     }
