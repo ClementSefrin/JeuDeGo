@@ -59,7 +59,10 @@ public class Session {
             return;
         }
 
-
+        if (!isNumeric(params[1])) {
+            displayErrorMessage(id, "unacceptable size");
+            return;
+        }
         boolean tailleCorrecte = Commandes.boardsize(go, Integer.parseInt(params[1]));
         if (!tailleCorrecte) {
             displayErrorMessage(id, "unacceptable size");

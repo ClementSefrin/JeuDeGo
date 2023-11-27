@@ -19,5 +19,7 @@
 - play : poser une pierre dans le damier, pas sur une pierre -> prendre des pierres ennemies -> interdire le suicide -> sauf si prise -> Ko (facultatif)
 - genmvove : gérer moteur de jeu et autre joueur
 
+## Sprint 3 :
+- pattern command : transformer chaque commande en classe, pour pouvoir faire des undo
 
 ## Dernier sprint validé : Sprint 1
