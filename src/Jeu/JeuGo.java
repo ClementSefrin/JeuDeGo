@@ -3,7 +3,7 @@ package Jeu;
 import java.util.Arrays;
 import java.util.LinkedList;
 
-public class Go {
+public class JeuGo {
     private static final String black = "X", white = "O", empty = ".";
     private int blackCaptured = 0, whiteCaptured = 0;
     private String[][] board;
@@ -171,9 +171,9 @@ public class Go {
             }
             sb.append(board.length - i);
             if (i == board.length - 2)
-                sb.append(" \t").append("WHITE (").append(Go.white).append(") has captures ").append(blackCaptured).append(" stones").append("\n");
+                sb.append(" \t").append("WHITE (").append(JeuGo.white).append(") has captures ").append(blackCaptured).append(" stones").append("\n");
             else if (i == board.length - 1)
-                sb.append(" \t").append("BLACK (").append(Go.black).append(") has captures ").append(whiteCaptured).append(" stones").append("\n");
+                sb.append(" \t").append("BLACK (").append(JeuGo.black).append(") has captures ").append(whiteCaptured).append(" stones").append("\n");
             else
                 sb.append("\n");
         }

@@ -3,24 +3,24 @@ package Jeu;
 
 import java.util.LinkedList;
 
-public class Commands {
+public class Commandes {
 
     private static final int MAX_SIZE = 19, MIN_SIZE = 4;
 
-    public static boolean boardsize(Go go, int size) {
+    public static boolean boardsize(JeuGo go, int size) {
         if (size < MIN_SIZE || size > MAX_SIZE)
             return false;
         go.setSize(size);
         return true;
     }
 
-    public static String showboard(Go go) {
+    public static String showboard(JeuGo go) {
         if (!go.isBoardCreated())
             return "";
         return go.toString();
     }
 
-    public static String play(Go go, String color, String coord) {
+    public static String play(JeuGo go, String color, String coord) {
         //tableau pas créé
         if (!go.isBoardCreated())
             return "illegal move";

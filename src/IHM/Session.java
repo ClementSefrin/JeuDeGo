@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class Session {
     private static final Scanner sc = new Scanner(System.in);
-    private static Go go = new Go();
+    private static JeuGo go = new JeuGo();
     private static final int NO_ID = -1;
 
     public static void session() {
@@ -66,7 +66,7 @@ public class Session {
             displayErrorMessage(id, "not an Integer");
             return;
         }
-        boolean tailleCorrecte = Commands.boardsize(go, Integer.parseInt(params[1]));
+        boolean tailleCorrecte = Commandes.boardsize(go, Integer.parseInt(params[1]));
         if (!tailleCorrecte) {
             displayErrorMessage(id, "unacceptable size");
             return;
@@ -85,7 +85,7 @@ public class Session {
         /*
         never fails
          */
-        String board = Commands.showboard(go);
+        String board = Commandes.showboard(go);
         displaySuccessMessage(id, new String[]{board});
     }
 
@@ -93,7 +93,7 @@ public class Session {
         /*
         never fails
          */
-        Commands.boardsize(go, go.getBoard().length);
+        Commandes.boardsize(go, go.getBoard().length);
         displaySuccessMessage(id, new String[]{});
     }
 
@@ -103,7 +103,7 @@ public class Session {
             displayErrorMessage(id, "syntax error");
             return;
         }
-        String message = Commands.play(go, params[1], params[2]);
+        String message = Commandes.play(go, params[1], params[2]);
         if (message == "ok")
             displaySuccessMessage(id, new String[]{});
         else
