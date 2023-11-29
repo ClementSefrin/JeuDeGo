@@ -37,17 +37,29 @@ public class Session {
                 case "clear_board":
                     clearBoard(id);
                     break;
+                case "genmove":
+                    genmove(id, params);
+                    break;
                 case "quit":
                     quit(id);
-                    break;
-                case "chaine":
-
                     break;
                 default:
                     displayErrorMessage(id, "unknown command");
                     break;
             }
         }
+    }
+
+    private static void genmove(int id, String[] params) {
+        if (params.length != 2) {
+            displayErrorMessage(id, "syntax error");
+            return;
+        }
+        String message = Commandes.genmove(go, params[1]);
+        if (message.length() <= 3)
+            displaySuccessMessage(id, message);
+        else
+            displayErrorMessage(id, message);
     }
 
     //--------------------------board commands--------------------------//
@@ -78,7 +90,7 @@ public class Session {
         //reset move history to empty
 
 
-        displaySuccessMessage(id, new String[]{});
+        displaySuccessMessage(id, "");
     }
 
     private static void showboard(int id) {
@@ -86,7 +98,7 @@ public class Session {
         never fails
          */
         String board = Commandes.showboard(go);
-        displaySuccessMessage(id, new String[]{board});
+        displaySuccessMessage(id, board);
     }
 
     private static void clearBoard(int id) {
@@ -94,7 +106,7 @@ public class Session {
         never fails
          */
         Commandes.boardsize(go, go.getBoard().length);
-        displaySuccessMessage(id, new String[]{});
+        displaySuccessMessage(id, "");
     }
 
     //--------------------------game commands--------------------------//
@@ -105,7 +117,7 @@ public class Session {
         }
         String message = Commandes.play(go, params[1], params[2]);
         if (message == "ok")
-            displaySuccessMessage(id, new String[]{});
+            displaySuccessMessage(id, "");
         else
             displayErrorMessage(id, message);
     }
@@ -116,7 +128,7 @@ public class Session {
         /*
         never fails
          */
-        displaySuccessMessage(id, new String[]{});
+        displaySuccessMessage(id, "");
     }
 
     //--------------------------display commands--------------------------//
@@ -129,16 +141,13 @@ public class Session {
         System.out.println(sb.toString());
     }
 
-    private static void displaySuccessMessage(int id, String[] successMessages) {
+    private static void displaySuccessMessage(int id, String successMessages) {
         StringBuilder sb = new StringBuilder();
         sb.append("=");
         if (id != NO_ID)
             sb.append(id);
-        sb.append("\n");
-        for (String successMessage : successMessages) {
-            sb.append(successMessage).append("\n");
-        }
-        System.out.print(sb.toString());
+        sb.append(" ").append(successMessages);
+        System.out.println(sb.toString());
     }
 
     //--------------------------utils--------------------------//

@@ -68,4 +68,29 @@ public class Commandes {
         System.out.println(showboard(go));
         return "ok";
     }
+
+    public static String genmove(JeuGo go, String color) {
+        if (!go.isBoardCreated())
+            return "illegal move";
+
+        if (!color.equals("white") && !color.equals("black"))
+            return "syntaxe error";
+
+        String[][] board = go.getBoard();
+        int size = board.length;
+        int x = (int) (Math.random() * size);
+        int y = (int) (Math.random() * size);
+
+        while (!board[x][y].equals(".")) {
+            x = (int) (Math.random() * size);
+            y = (int) (Math.random() * size);
+        }
+
+        String coord = (char) (y + 'A') + "" + (size - x);
+        String message = play(go, color, coord);
+        if (message == "ok")
+            return coord;
+        else
+            return message;
+    }
 }
