@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class Session {
     private static final Scanner sc = new Scanner(System.in);
-    private static JeuGo go = new JeuGo();
+    private static Go go = new Go();
     private static final int NO_ID = -1;
 
     public static void session() {
@@ -40,6 +40,9 @@ public class Session {
                 case "quit":
                     quit(id);
                     break;
+                case "chaine":
+
+                    break;
                 default:
                     displayErrorMessage(id, "unknown command");
                     break;
@@ -60,10 +63,10 @@ public class Session {
         }
 
         if (!isNumeric(params[1])) {
-            displayErrorMessage(id, "unacceptable size");
+            displayErrorMessage(id, "not an Integer");
             return;
         }
-        boolean tailleCorrecte = Commandes.boardsize(go, Integer.parseInt(params[1]));
+        boolean tailleCorrecte = Commands.boardsize(go, Integer.parseInt(params[1]));
         if (!tailleCorrecte) {
             displayErrorMessage(id, "unacceptable size");
             return;
@@ -82,7 +85,7 @@ public class Session {
         /*
         never fails
          */
-        String board = Commandes.showboard(go);
+        String board = Commands.showboard(go);
         displaySuccessMessage(id, new String[]{board});
     }
 
@@ -90,7 +93,7 @@ public class Session {
         /*
         never fails
          */
-        Commandes.boardsize(go, go.getBoard().length);
+        Commands.boardsize(go, go.getBoard().length);
         displaySuccessMessage(id, new String[]{});
     }
 
@@ -100,7 +103,7 @@ public class Session {
             displayErrorMessage(id, "syntax error");
             return;
         }
-        String message = Commandes.play(go, params[1], params[2]);
+        String message = Commands.play(go, params[1], params[2]);
         if (message == "ok")
             displaySuccessMessage(id, new String[]{});
         else
