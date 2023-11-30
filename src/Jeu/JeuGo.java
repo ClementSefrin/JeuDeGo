@@ -53,18 +53,14 @@ public class JeuGo {
     }
 
     public boolean isCaptured(int x, int y) {
-        if (x < 0 || x >= board.length || y < 0 || y >= board.length)
-            return false;
-
-        if (board[x][y].equals("."))
-            return false;
-
-        String otherColor = board[x][y] == black ? white : black;
-
+        String color = board[x][y] == black ? black : white;
+        boolean blocked = true;
         int[][] neighbours = getNeighbours(x, y);
         for (int[] neighbour : neighbours) {
-            if (neighbour != null && board[neighbour[0]][neighbour[1]].equals(empty))
-                return false;
+            if (neighbour != null) {
+                if (board[neighbour[0]][neighbour[1]].equals(empty))
+                    return false;
+            }
         }
         return true;
     }
@@ -181,5 +177,17 @@ public class JeuGo {
         sb.append(displayLetters());
 
         return sb.toString();
+    }
+
+    public static String getEmpty() {
+        return empty;
+    }
+
+    public static String getBlack() {
+        return black;
+    }
+
+    public static String getWhite() {
+        return white;
     }
 }
