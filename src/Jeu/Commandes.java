@@ -59,7 +59,6 @@ public class Commandes {
             return "illegal move";
         }
 
-        System.out.println(showboard(go));
         return "ok";
     }
 
@@ -87,7 +86,7 @@ public class Commandes {
         if (message == "ok")
             return coord;
         else
-            return coord;
+            return genmove(go, color);
     }
 
     private static boolean isMoveIllegal(JeuGo go, String color, int x, int y) {

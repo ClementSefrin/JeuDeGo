@@ -50,24 +50,8 @@ public class Session {
         }
     }
 
-    private static void genmove(int id, String[] params) {
-        if (params.length != 2) {
-            displayErrorMessage(id, "syntax error");
-            return;
-        }
-        String message = Commandes.genmove(go, params[1]);
-        if (message.length() <= 3)
-            displaySuccessMessage(id, message);
-        else
-            displayErrorMessage(id, message);
-    }
-
     //--------------------------board commands--------------------------//
     private static void boardsize(int id, String[] params) {
-        /*
-        Syntax error. If the engine cannot handle the new size,
-        fails with the error message ”unacceptable size”
-         */
 
         if (params.length == 1) {
             displayErrorMessage(id, "unacceptable size");
@@ -84,19 +68,12 @@ public class Session {
             return;
         }
 
-        //reset number of captured stones of either color
         go.resetCapturedStones();
-
-        //reset move history to empty
-
 
         displaySuccessMessage(id, "");
     }
 
     private static void showboard(int id) {
-        /*
-        never fails
-         */
         String board = Commandes.showboard(go);
         displaySuccessMessage(id, board);
     }
@@ -122,12 +99,19 @@ public class Session {
             displayErrorMessage(id, message);
     }
 
-
+    private static void genmove(int id, String[] params) {
+        if (params.length != 2) {
+            displayErrorMessage(id, "syntax error");
+            return;
+        }
+        String message = Commandes.genmove(go, params[1]);
+        if (message.length() <= 3)
+            displaySuccessMessage(id, message);
+        else
+            displayErrorMessage(id, message);
+    }
     //--------------------------session commands--------------------------//
     private static void quit(int id) {
-        /*
-        never fails
-         */
         displaySuccessMessage(id, "");
     }
 
