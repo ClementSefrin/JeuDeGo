@@ -21,7 +21,8 @@
 
 ## Sprint 3 :
 - pattern command : transformer chaque commande en classe, pour pouvoir faire des undo
-- quand les deux passes, fin de la parties
+- quand les deux passes, fin de la parties ou quand il n'y a plus de possibilités sur le terrain
+  
 ## Dernier sprint validé : Sprint 1
 
 ## Possibilité de rajouté des commandes privé pour débugger (liberties, les libertés du groupe de pierre aux alentours) 
@@ -34,5 +35,5 @@ Bonus :
 - Un peu trop d'espace (problème en 19-19)
 - Idéalement les noirs doivent commencé (et chacun son tour)
 - Fichier de test avec gnugo, ou fourni 
-- 
+  
 
