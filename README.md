@@ -21,5 +21,18 @@
 
 ## Sprint 3 :
 - pattern command : transformer chaque commande en classe, pour pouvoir faire des undo
-
+- quand les deux passes, fin de la parties
 ## Dernier sprint validé : Sprint 1
+
+## Possibilité de rajouté des commandes privé pour débugger (liberties, les libertés du groupe de pierre aux alentours) 
+Bonus : 
+- 1 point bonus pour le KO 
+- 1 point suicide 
+- IA aléatoire (joue un coup autorisé), lancer 2 instances soit IA-humain
+
+## remarque sprint 2 :
+- Un peu trop d'espace (problème en 19-19)
+- Idéalement les noirs doivent commencé (et chacun son tour)
+- Fichier de test avec gnugo, ou fourni 
+- 
+
