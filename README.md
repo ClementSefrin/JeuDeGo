@@ -24,6 +24,7 @@
 - quand les deux passes, fin de la parties ou quand il n'y a plus de possibilités sur le terrain
   
 ## Dernier sprint validé : Sprint 1
+## Deuxième sprint validé : voir les remarques ci-dessous
 
 ## remarque sprint 2 :
 - Un peu trop d'espace (problème en 19-19)
