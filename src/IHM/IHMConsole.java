@@ -1,18 +1,29 @@
 package IHM;
 
 import Jeu.*;
+import joueurs.ConsolePlayer;
+import joueurs.RandomPlayer;
 
 import java.util.Arrays;
+import java.util.Random;
 import java.util.Scanner;
 
-public class Session {
+public class IHMConsole {
     private static final Scanner sc = new Scanner(System.in);
-    private static JeuGo go = new JeuGo();
+    private static JeuGo go = new JeuGo(new ConsolePlayer(), new ConsolePlayer());
     private static final int NO_ID = -1;
 
     public static void session() {
         String command = "start";
-        while (!command.equals("quit")) {
+        while (!go.isOver()) {
+            System.out.println(go.getCurrentPlayer());
+            if (!(go.getCurrentPlayer() instanceof ConsolePlayer)) {
+                go.getCurrentPlayer().play(go);
+                System.out.println(go.toString());
+                go.switchCurrent();
+                continue;
+            }
+
             command = sc.nextLine().trim();
             String[] params = command.split(" ");
 
@@ -25,6 +36,9 @@ public class Session {
             }
 
             switch (command) {
+                case "player":
+                    player(id, params);
+                    break;
                 case "boardsize":
                     boardsize(id, params);
                     break;
@@ -37,9 +51,6 @@ public class Session {
                 case "clear_board":
                     clearBoard(id);
                     break;
-                case "genmove":
-                    genmove(id, params);
-                    break;
                 case "quit":
                     quit(id);
                     break;
@@ -50,9 +61,21 @@ public class Session {
         }
     }
 
+    private static void player(int id, String[] params) {
+        String color = params[1];
+        String type = params[2];
+        switch (type) {
+            case "random":
+                go.setPlayer(color, new RandomPlayer(color));
+                break;
+            case "console":
+                go.setPlayer(color, new ConsolePlayer());
+                break;
+        }
+    }
+
     //--------------------------board commands--------------------------//
     private static void boardsize(int id, String[] params) {
-
         if (params.length == 1) {
             displayErrorMessage(id, "unacceptable size");
             return;
@@ -62,7 +85,7 @@ public class Session {
             displayErrorMessage(id, "not an Integer");
             return;
         }
-        boolean tailleCorrecte = Commandes.boardsize(go, Integer.parseInt(params[1]));
+        boolean tailleCorrecte = go.boardsize(Integer.parseInt(params[1]));
         if (!tailleCorrecte) {
             displayErrorMessage(id, "unacceptable size");
             return;
@@ -73,45 +96,36 @@ public class Session {
         displaySuccessMessage(id, "");
     }
 
-    private static void showboard(int id) {
-        String board = Commandes.showboard(go);
-        displaySuccessMessage(id, board);
-    }
-
     private static void clearBoard(int id) {
         /*
         never fails
          */
-        Commandes.boardsize(go, go.getBoard().length);
+        go.boardsize(go.getBoard().length);
         displaySuccessMessage(id, "");
     }
 
+    private static void showboard(int id) {
+        displaySuccessMessage(id, go.toString());
+    }
+
     //--------------------------game commands--------------------------//
+
     private static void play(int id, String[] params) {
         if (params.length != 3) {
             displayErrorMessage(id, "syntax error");
             return;
         }
-        String message = Commandes.play(go, params[1], params[2]);
-        if (message == "ok")
-            displaySuccessMessage(id, "");
-        else
+        String message = go.playMove(params[1], params[2]);
+        if (message == "ok") {
+            displaySuccessMessage(id, go.toString());
+            go.switchCurrent();
+        } else
             displayErrorMessage(id, message);
     }
 
-    private static void genmove(int id, String[] params) {
-        if (params.length != 2) {
-            displayErrorMessage(id, "syntax error");
-            return;
-        }
-        String message = Commandes.genmove(go, params[1]);
-        if (message.length() <= 3)
-            displaySuccessMessage(id, message);
-        else
-            displayErrorMessage(id, message);
-    }
     //--------------------------session commands--------------------------//
     private static void quit(int id) {
+        go.end();
         displaySuccessMessage(id, "");
     }
 

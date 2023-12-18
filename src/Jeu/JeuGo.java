@@ -1,24 +1,55 @@
 package Jeu;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 public class JeuGo {
+    private static final int MAX_SIZE = 19, MIN_SIZE = 4;
     private static final String black = "X", white = "O", empty = ".";
+    private boolean isOver = false;
     private int blackCaptured = 0, whiteCaptured = 0;
+    private Map<String, Player> players;
+    private Player currentPlayer;
     private String[][] board;
-    private static boolean isBoardCreated = false;
+    private boolean isBoardCreated = false;
 
-    //move history
-    //komi : points de compensation pour le joueur blanc
+    public boolean isOver() {
+        return isOver;
+    }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public JeuGo(Player white, Player black) {
+        players = new HashMap<>();
+        players.put("white", white);
+        players.put("black", black);
+        currentPlayer = players.get("black");
+        boardsize(9);
+    }
 
     //--------------------------board commands--------------------------//
-    public void setSize(int size) {
+    public boolean boardsize(int size) {
+        if (size < MIN_SIZE || size > MAX_SIZE)
+            return false;
         isBoardCreated = true;
         board = new String[size][size];
+        currentPlayer = players.get("black");
         for (String[] line : board) {
             Arrays.fill(line, empty);
         }
+        return true;
+    }
+
+    public void switchCurrent() {
+        currentPlayer = currentPlayer.equals(players.get("white")) ? players.get("black") : players.get("white");
+    }
+
+    public void setPlayer(String color, Player type) {
+        players.put(color, type);
     }
 
     public String[][] getBoard() {
@@ -30,8 +61,53 @@ public class JeuGo {
     }
 
     //--------------------------play commands--------------------------//
-    public void playMove(String color, int x, int y) {
+    private boolean isMoveIllegal(int x, int y) {
+        if (y < 0 || y >= board.length || x < 0 || x >= board.length)
+            return true;
+        if (!board[x][y].equals("."))
+            return true;
+        return false;
+    }
+
+    public String playMove(String color, String coord) {
+
+        if (!isBoardCreated)
+            return "illegal move";
+        if (!color.equals("white") && !color.equals("black"))
+            return "syntaxe error";
+        int x = board.length - Integer.parseInt(coord.substring(1));
+        int y = coord.charAt(0) - 'A';
+        if (y > 8)
+            --y;
+
+        if (isMoveIllegal(x, y))
+            return "illegal move";
+
         board[x][y] = (color.equals("black") ? black : white);
+
+        boolean isCaptured = false;
+        LinkedList<Integer[]> group = getGroupOfStones(x, y);
+        if (isCaptured(group))
+            isCaptured = true;
+
+        String otherColor = board[x][y] == black ? white : black;
+        boolean captures = false;
+        int[][] neighbours = getNeighbours(x, y);
+        for (int[] neighbour : neighbours) {
+            if (neighbour != null && board[neighbour[0]][neighbour[1]] == otherColor) {
+                group = getGroupOfStones(neighbour[0], neighbour[1]);
+                if (isCaptured(group)) {
+                    captures = true;
+                    capture(group);
+                }
+            }
+        }
+
+        if (isCaptured && !captures) {
+            cancelMove(x, y);
+            return "illegal move";
+        }
+        return "ok";
     }
 
     public void cancelMove(int x, int y) {
@@ -156,6 +232,9 @@ public class JeuGo {
     }
 
     public String toString() {
+        if (!isBoardCreated())
+            return "";
+
         StringBuilder sb = new StringBuilder();
 
         sb.append(displayLetters());
@@ -179,15 +258,7 @@ public class JeuGo {
         return sb.toString();
     }
 
-    public static String getEmpty() {
-        return empty;
-    }
-
-    public static String getBlack() {
-        return black;
-    }
-
-    public static String getWhite() {
-        return white;
+    public void end() {
+        isOver = true;
     }
 }

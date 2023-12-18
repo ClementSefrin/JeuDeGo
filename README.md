@@ -30,6 +30,8 @@
 - Un peu trop d'espace (problème en 19-19)
 - Idéalement les noirs doivent commencé (et chacun son tour)
 - Fichier de test avec gnugo, ou fourni 
+- public record Coord(int x, int y);
+
 
 ## Possibilité de rajouté des commandes privé pour débugger (liberties, les libertés du groupe de pierre aux alentours) 
 Bonus : 
