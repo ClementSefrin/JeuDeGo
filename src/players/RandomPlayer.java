@@ -15,8 +15,6 @@ public class RandomPlayer implements Player {
         do {
             x = (int) (Math.random() * size);
             y = (int) (Math.random() * size);
-            if (y >= 8)
-                ++y;
         } while (!go.isMoveLegal(x, y));
 
         String coord = (char) (y + 'A') + "" + (size - x);

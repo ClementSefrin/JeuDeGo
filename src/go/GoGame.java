@@ -14,7 +14,7 @@ public class GoGame {
     private int turn;
 
     public GoGame() {
-        boardsize(5);
+        boardsize(19);
         reset();
     }
 
@@ -61,8 +61,6 @@ public class GoGame {
         Character oppositeColor = color.equals("black") ? white : black;
         int x = board.length - Integer.parseInt(coord.substring(1));
         int y = coord.charAt(0) - 'A';
-        if (y > 8)
-            --y;
 
         if (!isMoveLegal(x, y))
             return new String[]{"error", "illegal move"};
@@ -72,7 +70,7 @@ public class GoGame {
         Set<Coord> neighbours = getAllNeighbours(new Coord(x, y));
         for (Coord c : neighbours) {
             if (board[c.x()][c.y()].equals(oppositeColor)) {
-                int liberties = getNbLiberties(c.x(), c.y());
+                int liberties = getNbLibertiesGame(c.x(), c.y());
                 if (liberties == 0) {
                     capture(c, oppositeColor);
                 }
@@ -127,11 +125,23 @@ public class GoGame {
     }
 
     public int getNbLiberties(int x, int y) {
+        //-----------------------Méthode pour les tests-----------------------//
         if (y < 0 || y >= board.length || x < 0 || x >= board.length)
             return -1;
         int temp = x;
         x = board.length - y - 1;
         y = temp;
+        if (board[x][y].equals(empty))
+            return -2;
+        Coord c = new Coord(x, y);
+        Set<Coord> visited = new HashSet<>();
+        return nbStones(c, visited);
+    }
+
+    public int getNbLibertiesGame(int x, int y) {
+        //-----------------------Méthode pour le jeu-----------------------//
+        if (y < 0 || y >= board.length || x < 0 || x >= board.length)
+            return -1;
         if (board[x][y].equals(empty))
             return -2;
         Coord c = new Coord(x, y);
@@ -221,10 +231,6 @@ public class GoGame {
         int i = 0, len = board.length;
         sb.append(" \t");
         while (i < len) {
-            if (i == 8) {
-                ++i;
-                ++len;
-            }
             sb.append(Character.toString('A' + i)).append(" \t");
             i++;
         }
