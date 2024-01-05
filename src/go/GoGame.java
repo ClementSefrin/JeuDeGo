@@ -15,16 +15,40 @@ public class GoGame {
 
     public GoGame() {
         boardsize(5);
+        reset();
+    }
+
+    public GoGame(int size, String moves) {
+        boardsize(size);
+        String[] movesArray = moves.split(" ");
+        for (int i = 0; i < movesArray.length; i++) {
+            String move = movesArray[i];
+            String color = i % 2 == 0 ? "black" : "white";
+
+            String letter = move.substring(0, 1).toUpperCase();
+
+            String numericPart = move.substring(1).toUpperCase();
+            int n = numericPart.charAt(0) - 'A' + 1;
+            String number = String.valueOf(n);
+
+            String coord = letter + "" + number;
+            playMove(color, coord);
+        }
+        reset();
+    }
+
+    public void reset() {
         isOver = false;
         turn = 0;
         turnsPassed = 0;
+        blackCaptured = 0;
+        whiteCaptured = 0;
     }
 
     public int getTurn() {
         return turn;
     }
 
-    //--------------------------play--------------------------//
     public String[] playMove(String color, String coord) {
         if (!color.equals("white") && !color.equals("black"))
             return new String[]{"error", "syntax error"};
@@ -32,6 +56,7 @@ public class GoGame {
             return new String[]{"error", "wrong color"};
         if (turn % 2 != 0 && !color.equals("white"))
             return new String[]{"error", "wrong color"};
+
 
         Character oppositeColor = color.equals("black") ? white : black;
         int x = board.length - Integer.parseInt(coord.substring(1));
@@ -53,6 +78,7 @@ public class GoGame {
                 }
             }
         }
+
         ++turn;
         return new String[]{"success", coord + "\n" + toString()};
     }
@@ -78,8 +104,6 @@ public class GoGame {
         return true;
     }
 
-
-    //--------------------------groups--------------------------//
     public Set<Coord> getGroup(Coord xy) {
         Set<Coord> group = new HashSet<>();
         Set<Coord> visited = new HashSet<>();
@@ -102,11 +126,12 @@ public class GoGame {
         return group;
     }
 
-
-    //--------------------------liberties--------------------------//
     public int getNbLiberties(int x, int y) {
-        if (!isMoveLegal(x, y))
+        if (y < 0 || y >= board.length || x < 0 || x >= board.length)
             return -1;
+        int temp = x;
+        x = board.length - y - 1;
+        y = temp;
         if (board[x][y].equals(empty))
             return -2;
         Coord c = new Coord(x, y);
@@ -145,7 +170,6 @@ public class GoGame {
         return neighbours;
     }
 
-    //--------------------------captures--------------------------//
     private void capture(Coord xy, Character color) {
         Set<Coord> group = getGroup(xy);
         for (Coord c : group) {
@@ -157,7 +181,6 @@ public class GoGame {
         }
     }
 
-    //--------------------------board--------------------------//
     public boolean boardsize(int size) {
         if (size < MIN_SIZE || size > MAX_SIZE)
             return false;
@@ -165,7 +188,7 @@ public class GoGame {
         for (Character[] line : board) {
             Arrays.fill(line, empty);
         }
-        blackCaptured = whiteCaptured = 0;
+        reset();
         return true;
     }
 
@@ -183,7 +206,6 @@ public class GoGame {
         return board;
     }
 
-    //--------------------------end--------------------------//
     public boolean isOver() {
         if (turnsPassed >= 2)
             isOver = true;
@@ -194,7 +216,6 @@ public class GoGame {
         isOver = true;
     }
 
-    //--------------------------display--------------------------//
     private String displayLetters() {
         StringBuilder sb = new StringBuilder();
         int i = 0, len = board.length;
@@ -213,11 +234,6 @@ public class GoGame {
     }
 
     public String toString() {
-        /*
-        if (!isBoardCreated())
-            return "";
-        */
-
         StringBuilder sb = new StringBuilder();
 
         sb.append(displayLetters());

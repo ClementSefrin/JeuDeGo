@@ -7,6 +7,7 @@ import players.RandomPlayer;
 import utils.Coord;
 
 import java.awt.*;
+import java.io.Console;
 import java.util.*;
 
 
@@ -21,12 +22,12 @@ public class IHMConsole {
         String command = "start";
         go = new GoGame();
         players = new HashMap<>();
-        players.put(Color.BLACK, new ConsolePlayer());
+        players.put(Color.BLACK, new RandomPlayer());
         players.put(Color.WHITE, new RandomPlayer());
         currentPlayer = players.get(Color.BLACK);
 
         while (!go.isOver()) {
-            if (currentPlayer instanceof RandomPlayer) {
+            if (!(currentPlayer instanceof ConsolePlayer)) {
                 String[] args = currentPlayer.getMove(go);
                 switch (args[0]) {
                     case "play":
@@ -71,10 +72,10 @@ public class IHMConsole {
                     getLiberties(id, args);
                     break;
                 case "group":
-                    //getGroup(args);
+                    getGroup(args);
                     break;
                 case "player":
-                    //player(id, args);
+                    player(id, args);
                     break;
                 case "quit":
                     quit(id);
@@ -83,6 +84,20 @@ public class IHMConsole {
                     displayErrorMessage(id, "unknown command");
                     break;
             }
+        }
+    }
+
+    private static void play(int id, String[] args) {
+        if (args.length != 3) {
+            displayErrorMessage(id, "syntax error");
+            return;
+        }
+        String[] result = go.playMove(args[1], args[2]);
+        if (result[0].equals("error")) {
+            displayErrorMessage(id, result[1]);
+        } else {
+            displaySuccessMessage(id, result[1]);
+            switchCurrent();
         }
     }
 
@@ -104,51 +119,32 @@ public class IHMConsole {
         currentPlayer = currentPlayer.equals(players.get(Color.WHITE)) ? players.get(Color.BLACK) : players.get(Color.WHITE);
     }
 
-    /*
-    private static void getGroup(String[] args) {
-        Coord c = new Coord(Integer.parseInt(args[1]), Integer.parseInt(args[2]));
-        Set<Coord> group = go.getGroup(c);
-        StringBuilder sb = new StringBuilder();
-        for (Coord coord : group) {
-            sb.append(coord.toString()).append(" ");
-        }
-        System.out.println(sb.toString());
-    }
-    */
-
-    private static void getLiberties(int id, String[] args) {
-        int n = go.getNbLiberties(Integer.parseInt(args[1]), Integer.parseInt(args[2]));
-        if (n == -1) {
-            displayErrorMessage(id, "coordinates out of range");
-            return;
-        }
-        if (n == -2) {
-            displayErrorMessage(id, "no stone at these coordinates");
-            return;
-        }
-        displaySuccessMessage(id, n + "");
-    }
-
-    private static void play(int id, String[] args) {
-        if (args.length != 3) {
-            displayErrorMessage(id, "syntax error");
-            return;
-        }
-        String[] result = go.playMove(args[1], args[2]);
-        if (result[0].equals("error")) {
-            displayErrorMessage(id, result[1]);
-        } else {
-            displaySuccessMessage(id, result[1]);
-            switchCurrent();
-        }
-    }
-
     private static void quit(int id) {
         go.end();
         displaySuccessMessage(id, "");
     }
 
-    //--------------------------board commands--------------------------//
+    private static void player(int id, String[] args) {
+        if (args.length != 3) {
+            displayErrorMessage(id, "syntax error");
+            return;
+        }
+        if (!args[2].equals("console") && !args[2].equals("random")) {
+            displayErrorMessage(id, "unknown player type");
+            return;
+        }
+        if (!args[1].equals("black") && !args[1].equals("white")) {
+            displayErrorMessage(id, "wrong color");
+            return;
+        }
+        Color color = args[1].equals("black") ? Color.BLACK : Color.WHITE;
+        Player player = args[2].equals("console") ? new ConsolePlayer() : new RandomPlayer();
+        players.put(color, player);
+        switchCurrent();
+        switchCurrent();
+        displaySuccessMessage(id, "");
+    }
+
     private static void boardsize(int id, String[] args) {
         if (args.length == 1) {
             displayErrorMessage(id, "unacceptable size");
@@ -179,7 +175,29 @@ public class IHMConsole {
         displaySuccessMessage(id, "");
     }
 
-    //--------------------------display commands--------------------------//
+    private static void getGroup(String[] args) {
+        Coord c = new Coord(Integer.parseInt(args[1]), Integer.parseInt(args[2]));
+        Set<Coord> group = go.getGroup(c);
+        StringBuilder sb = new StringBuilder();
+        for (Coord coord : group) {
+            sb.append(coord.toString()).append(" ");
+        }
+        System.out.println(sb.toString());
+    }
+
+    private static void getLiberties(int id, String[] args) {
+        int n = go.getNbLiberties(Integer.parseInt(args[1]), Integer.parseInt(args[2]));
+        if (n == -1) {
+            displayErrorMessage(id, "coordinates out of range");
+            return;
+        }
+        if (n == -2) {
+            displayErrorMessage(id, "no stone at these coordinates");
+            return;
+        }
+        displaySuccessMessage(id, n + "");
+    }
+
     private static void displayErrorMessage(int id, String errorMessage) {
         StringBuilder sb = new StringBuilder();
         sb.append("?");
@@ -198,7 +216,6 @@ public class IHMConsole {
         System.out.println(sb.toString());
     }
 
-    //--------------------------utils--------------------------//
     private static boolean isNumeric(String strNum) {
         if (strNum == null) {
             return false;
