@@ -6,7 +6,7 @@ import java.util.*;
 
 public class GoGame {
     private static final Character black = 'X', white = 'O', empty = '.';
-    private static final int MAX_SIZE = 19, MIN_SIZE = 1;
+    private static final int MAX_SIZE = 19, MIN_SIZE = 9;
     private Character[][] board;
     private int blackCaptured = 0, whiteCaptured = 0;
     private boolean isOver;
@@ -125,7 +125,7 @@ public class GoGame {
     }
 
     public int getNbLiberties(int x, int y) {
-        //-----------------------Méthode pour les tests-----------------------//
+        //-----------------------MÃ©thode pour les tests-----------------------//
         if (y < 0 || y >= board.length || x < 0 || x >= board.length)
             return -1;
         int temp = x;
@@ -139,7 +139,7 @@ public class GoGame {
     }
 
     public int getNbLibertiesGame(int x, int y) {
-        //-----------------------Méthode pour le jeu-----------------------//
+        //-----------------------MÃ©thode pour le jeu-----------------------//
         if (y < 0 || y >= board.length || x < 0 || x >= board.length)
             return -1;
         if (board[x][y].equals(empty))
