@@ -14,7 +14,7 @@ public class GoGame {
     private int turn;
 
     public GoGame() {
-        boardsize(19);
+        boardsize(10);
         reset();
     }
 
@@ -67,18 +67,63 @@ public class GoGame {
 
         board[x][y] = color.equals("black") ? black : white;
 
+        boolean suicide = suicides(x, y, oppositeColor);
+
+        boolean captures = captures(x, y, oppositeColor);
+
+        if (suicide && !captures) {
+            board[x][y] = empty;
+            return new String[]{"error", "illegal move (suicide)"};
+        }
+
+        ++turn;
+        return new String[]{"success", coord + "\n" + toString()};
+    }
+
+    public void playTemp(int x, int y, String color) {
+        board[x][y] = color.equals("black") ? black : white;
+    }
+
+    public void cancelPlayTemp(int x, int y) {
+        board[x][y] = empty;
+    }
+
+    public boolean suicides(int x, int y, Character oppositeColor) {
+        Set<Coord> neighbours = getAllNeighbours(new Coord(x, y));
+        for (Coord c : neighbours) {
+            if (board[c.x()][c.y()].equals(oppositeColor)) {
+                if (getNbLibertiesGame(x, y) == 0) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean captures(int x, int y, Character oppositeColor) {
+        boolean captures = false;
         Set<Coord> neighbours = getAllNeighbours(new Coord(x, y));
         for (Coord c : neighbours) {
             if (board[c.x()][c.y()].equals(oppositeColor)) {
                 int liberties = getNbLibertiesGame(c.x(), c.y());
                 if (liberties == 0) {
-                    capture(c, oppositeColor);
+                    captureStones(c, oppositeColor);
+                    captures = true;
                 }
             }
         }
+        return captures;
+    }
 
-        ++turn;
-        return new String[]{"success", coord + "\n" + toString()};
+    private void captureStones(Coord xy, Character color) {
+        Set<Coord> group = getGroup(xy);
+        for (Coord c : group) {
+            board[c.x()][c.y()] = empty;
+            if (color.equals(black))
+                ++blackCaptured;
+            else
+                ++whiteCaptured;
+        }
     }
 
     public String pass(String color) {
@@ -180,17 +225,6 @@ public class GoGame {
         return neighbours;
     }
 
-    private void capture(Coord xy, Character color) {
-        Set<Coord> group = getGroup(xy);
-        for (Coord c : group) {
-            board[c.x()][c.y()] = empty;
-            if (color.equals(black))
-                ++blackCaptured;
-            else
-                ++whiteCaptured;
-        }
-    }
-
     public boolean boardsize(int size) {
         if (size < MIN_SIZE || size > MAX_SIZE)
             return false;
@@ -210,6 +244,17 @@ public class GoGame {
             }
         }
         return true;
+    }
+
+    public int getNbFreeSpaces() {
+        int cpt = 0;
+        for (Character[] line : board) {
+            for (Character c : line) {
+                if (c.equals(empty))
+                    ++cpt;
+            }
+        }
+        return cpt;
     }
 
     public Character[][] getBoard() {

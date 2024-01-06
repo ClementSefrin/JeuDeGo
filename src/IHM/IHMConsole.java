@@ -29,6 +29,7 @@ public class IHMConsole {
         while (!go.isOver()) {
             if (!(currentPlayer instanceof ConsolePlayer)) {
                 String[] args = currentPlayer.getMove(go);
+
                 switch (args[0]) {
                     case "play":
                         play(NO_ID, args);
