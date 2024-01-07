@@ -42,4 +42,9 @@ public class RandomPlayer implements Player {
         String coord = (char) (y + 'A') + "" + (size - x);
         return new String[]{"play", color, coord};
     }
+
+    @Override
+    public Player cloner() {
+        return new RandomPlayer();
+    }
 }

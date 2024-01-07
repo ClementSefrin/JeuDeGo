@@ -1,9 +1,8 @@
 package IHM;
 
+import go.Factory;
 import go.GoGame;
 import go.Player;
-import players.ConsolePlayer;
-import players.RandomPlayer;
 import utils.Coord;
 
 import java.awt.*;
@@ -18,16 +17,16 @@ public class IHMConsole {
     private static Player currentPlayer;
     private static final int NO_ID = -1;
 
-    public static void session() {
+    public static void session(Player black, Player white) {
         String command = "start";
         go = new GoGame();
         players = new HashMap<>();
-        players.put(Color.BLACK, new RandomPlayer());
-        players.put(Color.WHITE, new RandomPlayer());
+        players.put(Color.BLACK, black);
+        players.put(Color.WHITE, white);
         currentPlayer = players.get(Color.BLACK);
 
         while (!go.isOver()) {
-            if (!(currentPlayer instanceof ConsolePlayer)) {
+            if (!(currentPlayer.getClass().equals(Factory.create("console").getClass()))) {
                 String[] args = currentPlayer.getMove(go);
 
                 switch (args[0]) {
@@ -71,9 +70,6 @@ public class IHMConsole {
                     break;
                 case "liberties":
                     getLiberties(id, args);
-                    break;
-                case "group":
-                    getGroup(args);
                     break;
                 case "player":
                     player(id, args);
@@ -130,7 +126,7 @@ public class IHMConsole {
             displayErrorMessage(id, "syntax error");
             return;
         }
-        if (!args[2].equals("console") && !args[2].equals("random")) {
+        if (!Factory.getTypes().contains(args[2])) {
             displayErrorMessage(id, "unknown player type");
             return;
         }
@@ -139,7 +135,7 @@ public class IHMConsole {
             return;
         }
         Color color = args[1].equals("black") ? Color.BLACK : Color.WHITE;
-        Player player = args[2].equals("console") ? new ConsolePlayer() : new RandomPlayer();
+        Player player = args[2].equals("console") ? Factory.create("console") : Factory.create("random");
         players.put(color, player);
         switchCurrent();
         switchCurrent();
@@ -174,16 +170,6 @@ public class IHMConsole {
     private static void clearBoard(int id) {
         go.boardsize(go.getBoard().length);
         displaySuccessMessage(id, "");
-    }
-
-    private static void getGroup(String[] args) {
-        Coord c = new Coord(Integer.parseInt(args[1]), Integer.parseInt(args[2]));
-        Set<Coord> group = go.getGroup(c);
-        StringBuilder sb = new StringBuilder();
-        for (Coord coord : group) {
-            sb.append(coord.toString()).append(" ");
-        }
-        System.out.println(sb.toString());
     }
 
     private static void getLiberties(int id, String[] args) {

@@ -77,6 +77,7 @@ public class GoGame {
         }
 
         ++turn;
+        turnsPassed = 0;
         return new String[]{"success", coord + "\n" + toString()};
     }
 
