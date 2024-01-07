@@ -1,6 +1,6 @@
 # Jeu de Go
 
-### Application en ligne de commande permettant de jouer une partie de Go.
+### Programme permettant de jouer une partie de Go.
 
 ### Groupe : 206
 - Nicolas Estermann
@@ -8,34 +8,22 @@
 - Clément Salliot
 - Kévin Jiang
 
-## Sprint 1 :
+### Fonctionnalités implémentées
+- boardsize size : modifie la taille du plateau de jeu à size
+- showboard : affiche le plateau
+- clear_board : efface toutes les pierres jouées sur le plateau
+- quit : arrête le programme
+- play color coord : permet à un joueur console de jouer un coup
+- pass color : permet à un joueur console de passer son tour
+- liberties x y : permet d’obtenir le nombre de libertés d’une pierre à un emplacement donné
+- player color type : change le type de joueur pour une couleur donnée
 
-- boardsize : prend en paramètre un nombre. Permet de définir la taille du plateau de jeu
-- showboard : ne prend aucun paramètre. Permet d’afficher le tableau
-- quit : ne prend aucun paramètre. Permet d’arrêter l’application
+Le programme compte le nombre de pierres capturées en temps réel.
 
-## Sprint 2 :
+Si le plateau est rempli ou si les deux joueurs passent leur tour consécutivement, le programme s’arrête.
 
-- play : poser une pierre dans le damier, pas sur une pierre -> prendre des pierres ennemies -> interdire le suicide -> sauf si prise -> Ko (facultatif)
-- genmvove : gérer moteur de jeu et autre joueur
+Il n’est pas possible de se suicider, sauf si la pierre posée capture d’autres pierres.
 
-## Sprint 3 :
-- pattern command : transformer chaque commande en classe, pour pouvoir faire des undo
-- quand les deux passes, fin de la parties ou quand il n'y a plus de possibilités sur le terrain
-  
-## Dernier sprint validé : Sprint 1
-## Deuxième sprint validé : voir les remarques ci-dessous
-
-## remarque sprint 2 :
-- Un peu trop d'espace (problème en 19-19)
-- Idéalement les noirs doivent commencé (et chacun son tour)
-- Fichier de test avec gnugo, ou fourni 
-- public record Coord(int x, int y);
-
-
-## Possibilité de rajouté des commandes privé pour débugger (liberties, les libertés du groupe de pierre aux alentours) 
-Bonus : 
-- 1 point bonus pour le KO 
-- 1 point suicide 
-- IA aléatoire (joue un coup autorisé), lancer 2 instances soit IA-humain
-
+Le programme prend en compte deux types de joueurs :
+- console : joue en rentrant des commandes dans la console
+- random : bot qui joue de manière aléatoire
