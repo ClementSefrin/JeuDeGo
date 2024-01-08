@@ -1,5 +1,7 @@
 # Jeu de Go
 
+TB : 18/20 (MZ)
+
 ### Programme permettant de jouer une partie de Go.
 
 ### Groupe : 206
