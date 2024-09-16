@@ -29,5 +29,3 @@ Il n’est pas possible de se suicider, sauf si la pierre posée capture d’aut
 Le programme prend en compte deux types de joueurs :
 - console : joue en rentrant des commandes dans la console
 - random : bot qui joue de manière aléatoire
-
-[Dossier]([url](https://docs.google.com/document/d/1SZsgTkeGPODM_1-ylpjVrqyxv-LWZ-CovA38XKtX56I/edit?usp=sharing)
